@@ -1,0 +1,27 @@
+name: Daily Pattern Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Run update script
+        run: |
+          python scripts/update_patterns.py
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: Automated security pattern update
+          title: Automated security pattern update
+          body: This PR updates the security pattern with latest guidance.
+          branch: auto/security-pattern-update
